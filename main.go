@@ -40,12 +40,9 @@ func main() {
 	argc := len(os.Args)
 
 	redisDB := "0"
-	redisPW := ""
+	redisPW := os.Getenv("REDIS_PASSWORD")
 	redisPrefix := "fboxli:"
 
-	if argc >= 6 {
-		redisPW = os.Args[5]
-	}
 	if argc >= 5 {
 		redisPrefix = os.Args[4]
 	}
