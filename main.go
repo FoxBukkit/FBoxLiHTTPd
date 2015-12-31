@@ -1,23 +1,23 @@
 package main
 
 import (
-	"net/http"
-	"os"
 	"github.com/mediocregopher/radix.v2/pool"
 	"github.com/mediocregopher/radix.v2/redis"
+	"net/http"
+	"os"
 )
 
 // ./FBoxLiHTTPd ":8080" "127.0.0.1:6379" "redisdb (def: 0)" "keyprefix (def: fboxli:)" "redispw (def: none)"
 
 type FBoxLiHandler struct {
-	redisPool *pool.Pool
+	redisPool   *pool.Pool
 	redisPrefix string
 }
 
 func (h *FBoxLiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", "text/plain")
 
-	res := h.redisPool.Cmd("GET", h.redisPrefix + r.URL.Path[1:])
+	res := h.redisPool.Cmd("GET", h.redisPrefix+r.URL.Path[1:])
 	if res.Err != nil {
 		w.WriteHeader(500)
 		w.Write([]byte("500 - Internal Server Error"))
@@ -82,7 +82,7 @@ func main() {
 	}
 
 	http.ListenAndServe(os.Args[1], &FBoxLiHandler{
-		redisPool: redisPool,
+		redisPool:   redisPool,
 		redisPrefix: redisPrefix,
 	})
 }
